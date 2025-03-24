@@ -8,12 +8,12 @@ on:
 
 jobs:
   build:
-    uses: ./.github/workflows/reusable/build-image.yml
+    uses: ./.github/workflows/build-image.yml
     with:
       image-name: java-app
     secrets: inherit
 
   deploy:
     needs: build
-    uses: ./.github/workflows/reusable/deploy-app.yml
+    uses: ./.github/workflows/deploy-app.yml
     secrets: inherit
