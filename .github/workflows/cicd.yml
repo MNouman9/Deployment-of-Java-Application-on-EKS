@@ -1,4 +1,4 @@
-name: CI - Build and Deploy Java App
+name: CICD - Build and Deploy Java App
 
 on:
   push:
