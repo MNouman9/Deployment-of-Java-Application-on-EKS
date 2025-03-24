@@ -1,0 +1,25 @@
+name: Helm Chart Packaging
+
+on:
+  push:
+    paths:
+      - 'helm-charts/**'
+      - '.github/workflows/helm-artifact.yml'
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Package Helm chart
+        run: |
+          helm package ./helm-charts
+          mkdir -p artifacts
+          mv *.tgz artifacts/
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: helm-chart
+          path: artifacts
