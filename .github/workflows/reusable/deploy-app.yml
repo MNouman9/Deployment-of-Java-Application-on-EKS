@@ -21,8 +21,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Download Helm artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: helm-chart
+          path: ./artifacts
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v3
@@ -37,7 +43,8 @@ jobs:
 
       - name: Deploy with Helm
         run: |
-          helm upgrade --install my-app ./helm-charts \
+          CHART=$(ls ./artifacts/*.tgz)
+          helm upgrade --install my-app "$CHART" \
             --namespace default --create-namespace \
             --set image.repository=${{ secrets.ECR_REGISTRY }}/${{ secrets.ECR_REPOSITORY }} \
             --set image.tag=${{ github.sha }}
