@@ -32,28 +32,6 @@ resource "aws_security_group" "ssh_private" {
   }
 }
 
-resource "aws_security_group" "postgres" {
-  vpc_id      = var.vpc_id
-  name        = "database-sg-${var.application}-${var.environment}"
-  description = "Allow access to PostgreSQL instance"
-  tags = {
-    Name        = "database.securitygroup.${var.application}.${var.environment}"
-    Environment = var.environment
-    Application = var.application
-  }
-}
-
-resource "aws_security_group" "documentdb" {
-  vpc_id      = var.vpc_id
-  name        = "docdb-sg-${var.application}-${var.environment}"
-  description = "Allow access to DocumentDB instance"
-  tags = {
-    Name        = "docdb.securitygroup.${var.application}.${var.environment}"
-    Environment = var.environment
-    Application = var.application
-  }
-}
-
 resource "aws_security_group" "eks_cluster" {
   vpc_id      = var.vpc_id
   name        = "${var.application}-eks-cluster-${var.environment}"
@@ -83,24 +61,6 @@ resource "aws_security_group_rule" "ssh_private_tcp_22" {
   from_port                = 22
   to_port                  = 22
   source_security_group_id = aws_security_group.ssh_public.id
-}
-
-resource "aws_security_group_rule" "postgres_tcp_5432" {
-  security_group_id        = aws_security_group.postgres.id
-  type                     = "ingress"
-  protocol                 = "tcp"
-  from_port                = 5432
-  to_port                  = 5432
-  source_security_group_id = aws_security_group.eks_workers.id
-}
-
-resource "aws_security_group_rule" "docdb_tcp_27017" {
-  security_group_id        = aws_security_group.documentdb.id
-  type                     = "ingress"
-  protocol                 = "tcp"
-  from_port                = 27017
-  to_port                  = 27017
-  source_security_group_id = aws_security_group.eks_workers.id
 }
 
 resource "aws_security_group_rule" "eks_cluster_https_workers" {

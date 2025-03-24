@@ -172,12 +172,54 @@ resource "aws_default_security_group" "default" {
   egress  = []
 }
 
-resource "aws_flow_log" "flow_log" {
-  log_destination      = var.logging_bucket_arn
-  log_destination_type = "s3"
-  traffic_type         = "ALL"
-  vpc_id               = aws_vpc.default.id
-  destination_options {
-    hive_compatible_partitions = true
+
+resource "aws_flow_log" "this" {
+  iam_role_arn    = aws_iam_role.this.arn
+  log_destination = aws_cloudwatch_log_group.this.arn
+  traffic_type    = "ALL"
+  vpc_id          = aws_vpc.this.id
+}
+
+resource "aws_cloudwatch_log_group" "this" {
+  name = "VPC Flow Logs"
+}
+
+data "aws_iam_policy_document" "assume_role" {
+  statement {
+    effect = "Allow"
+
+    principals {
+      type        = "Service"
+      identifiers = ["vpc-flow-logs.amazonaws.com"]
+    }
+
+    actions = ["sts:AssumeRole"]
   }
+}
+
+resource "aws_iam_role" "this" {
+  name               = "vpc-flow-logs-role"
+  assume_role_policy = data.aws_iam_policy_document.assume_role.json
+}
+
+data "aws_iam_policy_document" "this" {
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "logs:CreateLogGroup",
+      "logs:CreateLogStream",
+      "logs:PutLogEvents",
+      "logs:DescribeLogGroups",
+      "logs:DescribeLogStreams",
+    ]
+
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_role_policy" "this" {
+  name   = "vpc-flow-logs-policy"
+  role   = aws_iam_role.this.id
+  policy = data.aws_iam_policy_document.this.json
 }

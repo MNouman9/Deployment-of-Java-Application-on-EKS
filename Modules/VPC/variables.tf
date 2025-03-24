@@ -38,9 +38,3 @@ variable "cidr_block_public_subnet_b" {
 variable "cidr_block_public_subnet_c" {
   description = "cidr block for public subnet c"
 }
-
-
-variable "logging_bucket_arn" {
-  type        = string
-  description = "Arn of the bucket used for logging."
-}
