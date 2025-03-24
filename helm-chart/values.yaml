@@ -1,0 +1,11 @@
+replicaCount: 1
+
+image:
+  repository: 123456789.dkr.ecr.us-east-1.amazonaws.com/java-app
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  protocol: TCP
+  port: 80
+  targetPort: 8080

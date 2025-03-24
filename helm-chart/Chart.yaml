@@ -1,0 +1,4 @@
+apiVersion: v2
+name: javapp
+version: 1.0.0
+description: A simple Java web app with Hello World and current time
