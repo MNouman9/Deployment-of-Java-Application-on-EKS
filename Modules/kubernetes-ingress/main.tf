@@ -3,7 +3,6 @@ resource "kubernetes_ingress_v1" "ingress" {
     name      = "${var.environment}-${var.application}-${var.app_name}-ingress"
     namespace = var.namespace
     annotations = {
-      # "alb.ingress.kubernetes.io/wafv2-acl-arn"        = var.waf_acl_arn
       "alb.ingress.kubernetes.io/scheme"               = "internet-facing"
       "alb.ingress.kubernetes.io/target-type"          = "ip"
       "alb.ingress.kubernetes.io/load-balancer-name"   = var.lb_name
@@ -45,13 +44,3 @@ resource "kubernetes_ingress_v1" "ingress" {
     }
   }
 }
-
-
-
-# resource "aws_route53_record" "alb_cname" {
-#   zone_id = var.route53_zone_id
-#   name    = var.url
-#   type    = "CNAME"
-#   ttl     = 300
-#   records = [var.record]
-# }
