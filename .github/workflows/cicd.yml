@@ -1,0 +1,19 @@
+name: CI - Build and Deploy Java App
+
+on:
+  push:
+    paths:
+      - 'JavaApp/**'
+      - '.github/workflows/cicd.yml'
+
+jobs:
+  build:
+    uses: ./.github/workflows/reusable/build-image.yml
+    with:
+      image-name: java-app
+    secrets: inherit
+
+  deploy:
+    needs: build
+    uses: ./.github/workflows/reusable/deploy-app.yml
+    secrets: inherit
