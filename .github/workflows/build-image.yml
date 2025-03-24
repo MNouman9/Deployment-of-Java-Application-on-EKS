@@ -21,9 +21,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      id-token: write
-      contents: read
+    ## This is for OIDC based authentication of GitHub with AWS
+    # permissions:
+    #   id-token: write
+    #   contents: read
 
     steps:
       - name: Checkout code
