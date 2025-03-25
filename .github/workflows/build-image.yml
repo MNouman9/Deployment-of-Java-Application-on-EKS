@@ -16,8 +16,8 @@ on:
       ECR_REPOSITORY:
         required: true
       ## For SonarQube implementation  
-      # SONAR_TOKEN:
-      #   required: true
+      SONAR_TOKEN:
+        required: true
 
   workflow_dispatch:
 
