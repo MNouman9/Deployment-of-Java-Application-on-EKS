@@ -18,6 +18,10 @@ on:
       ## For SonarQube implementation  
       SONAR_TOKEN:
         required: true
+      SONAR_PROJECT_KEY:
+        required: true
+      SONAR_ORG_KEY:
+        required: true     
 
   workflow_dispatch:
 
@@ -46,8 +50,8 @@ jobs:
         with:
           projectBaseDir: JavaApp
           args: >
-            -Dsonar.projectKey=my-key
-            -Dsonar.organization=my-org
+            -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
+            -Dsonar.organization=${{ secrets.SONAR_ORG_KEY }}
             -Dsonar.token=${{ secrets.SONAR_TOKEN }}
 
       - name: Configure AWS credentials
