@@ -189,7 +189,6 @@ You can customize this script further to include:
 - Helm value overrides
 - Namespace targeting
 - Release versioning
-- Dry-run and diff support
 
 ---
 
