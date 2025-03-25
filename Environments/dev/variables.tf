@@ -18,7 +18,7 @@ variable "application" {
 ################################################################################
 variable "app_domain_name" {
   type        = string
-  description = "Domain name of api"
+  description = "Domain name of application"
 }
 
 
