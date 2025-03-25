@@ -15,6 +15,7 @@ This repository contains a production-ready deployment setup for a Java Spring B
 - [CI/CD with GitHub Actions](#cicd-with-github-actions)  
 - [Why This Architecture?](#why-this-architecture)  
 - [Getting Started](#getting-started)
+- [Bash Script](#bash-script)
 - [Note on Future Improvements](#note-on-future-improvements)
 
 ---
@@ -31,6 +32,8 @@ This repository contains a production-ready deployment setup for a Java Spring B
 │   │   ├── service.yaml
 │   └── values.yaml
 │
+|   deploy-helm.sh              # Deploy Helm chart manually
+|
 ├── Environments/
 │   ├── Dev/                    # Dev environment Terraform code
 │   └── Modules/                # Reusable Terraform modules
@@ -169,6 +172,25 @@ This architecture is designed to be:
 2. **Deploy via GitHub Actions**
    - Push changes to `JavaApp/` or `helm-charts/` and the pipeline will be triggered automatically.
   
+---
+
+## Bash Script: `deploy-helm.sh`
+
+This script is located at the root of the repository and is designed to **simplify Helm deployments** for local testing or manual rollouts without relying on CI/CD triggers.
+
+### Why Use a Bash Script for Helm?
+
+- Provides a quick and consistent way to deploy the application locally
+- Abstracts the Helm command with predefined options, reducing human error
+- Useful for manual testing, debugging, or running Helm installs outside GitHub Actions
+- Helps maintain environment-specific flags or value overrides in a central place
+
+You can customize this script further to include:
+- Helm value overrides
+- Namespace targeting
+- Release versioning
+- Dry-run and diff support
+
 ---
 
 ## Note on Future Improvements
