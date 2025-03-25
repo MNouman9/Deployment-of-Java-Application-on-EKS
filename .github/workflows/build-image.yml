@@ -41,15 +41,14 @@ jobs:
           java-version: '17'
 
       ## SonarQube implementation
-      ## Uncomment this if you to use SonarQube
-      # - name: SonarQube Scan
-      #   uses: SonarSource/sonarcloud-github-action@v2
-      #   with:
-      #     projectBaseDir: JavaApp
-      #     args: >
-      #       -Dsonar.projectKey=my-key
-      #       -Dsonar.organization=my-org
-      #       -Dsonar.token=${{ secrets.SONAR_TOKEN }}
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@v2
+        with:
+          projectBaseDir: JavaApp
+          args: >
+            -Dsonar.projectKey=my-key
+            -Dsonar.organization=my-org
+            -Dsonar.token=${{ secrets.SONAR_TOKEN }}
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v3
