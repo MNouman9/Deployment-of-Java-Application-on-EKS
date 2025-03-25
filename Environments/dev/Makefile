@@ -8,7 +8,7 @@ clean:
 
 init:
 	terraform fmt -recursive ../../
-	AWS_PROFILE=DEVAWS terraform init -backend-config=../../backends/dev-backend.hcl -upgrade
+	AWS_PROFILE=DEVAWS terraform init -backend-config=../../Backend/DEV-Backend.hcl -upgrade
 	terraform validate
 
 plan:
