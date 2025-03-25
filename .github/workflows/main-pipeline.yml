@@ -4,7 +4,9 @@ on:
   push:
     paths:
       - 'JavaApp/**'
-      - '.github/workflows/cicd.yml'
+      - '.github/workflows/main-pipeline.yml'
+  
+  workflow_dispatch:
 
 jobs:
   build:

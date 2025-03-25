@@ -15,13 +15,17 @@ on:
         required: true
       ECR_REPOSITORY:
         required: true
-      SONAR_TOKEN:
-        required: true
+      ## For SonarQube implementation  
+      # SONAR_TOKEN:
+      #   required: true
+      
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
     ## This is for OIDC based authentication of GitHub with AWS
+    ## Uncomment this if you want to use OIDC auth
     # permissions:
     #   id-token: write
     #   contents: read
@@ -35,14 +39,16 @@ jobs:
         with:
           java-version: '17'
 
-      - name: SonarQube Scan
-        uses: SonarSource/sonarcloud-github-action@v2
-        with:
-          projectBaseDir: JavaApp
-          args: >
-            -Dsonar.projectKey=my-key
-            -Dsonar.organization=my-org
-            -Dsonar.token=${{ secrets.SONAR_TOKEN }}
+      ## SonarQube implementation
+      ## Uncomment this if you to use SonarQube
+      # - name: SonarQube Scan
+      #   uses: SonarSource/sonarcloud-github-action@v2
+      #   with:
+      #     projectBaseDir: JavaApp
+      #     args: >
+      #       -Dsonar.projectKey=my-key
+      #       -Dsonar.organization=my-org
+      #       -Dsonar.token=${{ secrets.SONAR_TOKEN }}
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v3
@@ -64,6 +70,11 @@ jobs:
         with:
           image-ref: ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:${{ github.sha }}
 
+      - name: Re-Tag Docker image
+        run: |
+          docker tag ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:${{ github.sha }} ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:latest
+
       - name: Push Docker image to ECR
         run: |
           docker push ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:${{ github.sha }}
+          docker push ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:latest

@@ -6,6 +6,8 @@ on:
       - 'helm-charts/**'
       - '.github/workflows/helm-artifact.yml'
 
+  workflow_dispatch:
+  
 jobs:
   package:
     runs-on: ubuntu-latest

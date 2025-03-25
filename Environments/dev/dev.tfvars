@@ -1,5 +1,5 @@
 environment                      = "dev"
-region                           = "us-east-1"
+region                           = "us-east-2"
 application                      = "javaapp"
 
 eks_worker_node_instance_type    = "t2.medium"
