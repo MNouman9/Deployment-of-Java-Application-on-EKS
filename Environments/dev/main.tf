@@ -39,7 +39,7 @@ module "eks" {
   vpc_id                       = module.vpc.vpc_id
   public_access_cidr_blocks    = var.public_access_cidr_blocks
   subnet_ids                   = module.vpc.private_subnets
-  eks_key_arn                  = var.eks_key_arn
+  eks_key_arn                  = module.kms.eks_key_arn
   workers_instance_types       = [var.eks_worker_node_instance_type]
   worker_security_group_ids    = module.securitygroups.eks_workers_security_group_ids
   node_group_desired_size      = var.eks_node_group_desired_size

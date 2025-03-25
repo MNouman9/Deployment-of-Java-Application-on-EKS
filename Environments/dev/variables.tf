@@ -59,19 +59,9 @@ variable "eks_node_group_max_size" {
   type        = number
 }
 
-variable "eks_key_arn" {
-  type        = string
-  description = "Kms key used for eks secrets."
-}
-
 variable "public_access_cidr_blocks" {
   description = "List of cidr blocks for public access to the environment."
   type        = list(string)
-}
-
-variable "logging_bucket_arn" {
-  type        = string
-  description = "Arn of the bucket used for logging."
 }
 
 ################################################################################

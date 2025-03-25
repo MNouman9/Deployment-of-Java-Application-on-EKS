@@ -44,6 +44,10 @@ jobs:
           distribution: temurin
           java-version: '17'
 
+      - name: Build Java project
+        run: mvn clean compile
+        working-directory: JavaApp
+
       ## SonarQube implementation
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
