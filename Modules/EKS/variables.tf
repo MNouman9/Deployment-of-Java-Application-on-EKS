@@ -88,10 +88,6 @@ variable "eks_alb_namespace" {
   default     = "kube-system"
 }
 
-variable "region" {
-  description = "Region."
-}
-
 variable "eks_alb_service_account_name" {
   description = "The name of the EKS ALB Service Account."
 }

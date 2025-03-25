@@ -39,10 +39,6 @@ variable "healthcheck_path" {
   description = "Healthcheck path"
   default     = "/"
 }
-variable "route53_zone_id" {
-  type        = string
-  description = "Route53 zone id."
-}
 
 variable "record" {
   type        = string

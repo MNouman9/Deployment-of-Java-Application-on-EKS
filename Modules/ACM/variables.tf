@@ -15,7 +15,3 @@ variable "region" {
 variable "domain_name" {
   description = "Domain name for certificate."
 }
-
-# variable "route53_zone_id" {
-#   description = "Route53 zone id for domain validation."
-# }

@@ -177,11 +177,11 @@ resource "aws_flow_log" "this" {
   iam_role_arn    = aws_iam_role.this.arn
   log_destination = aws_cloudwatch_log_group.this.arn
   traffic_type    = "ALL"
-  vpc_id          = aws_vpc.this.id
+  vpc_id          = aws_vpc.default.id
 }
 
 resource "aws_cloudwatch_log_group" "this" {
-  name = "VPC Flow Logs"
+  name = "VPC-Flow-Logs"
 }
 
 data "aws_iam_policy_document" "assume_role" {

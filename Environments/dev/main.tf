@@ -13,7 +13,6 @@ module "vpc" {
   cidr_block_public_subnet_a  = var.vpc_cidr_block_public_subnet_a
   cidr_block_public_subnet_b  = var.vpc_cidr_block_public_subnet_b
   cidr_block_public_subnet_c  = var.vpc_cidr_block_public_subnet_c
-  logging_bucket_arn          = var.logging_bucket_arn
 }
 
 ################################################################################
@@ -52,6 +51,68 @@ module "eks" {
 }
 
 ################################################################################
+# Cluster Autoscaler
+################################################################################
+module "cluster_auto_scaler_iam" {
+  source = "../../Modules/iam-role-for-service-accounts-eks"
+
+  role_name                        = "${var.application}-${var.environment}_eks_CA"
+  attach_cluster_autoscaler_policy = true
+  cluster_autoscaler_cluster_names = [module.eks.cluster_name]
+  oidc_providers = {
+    main = {
+      provider_arn               = module.eks.oidc_provider_arn
+      namespace_service_accounts = ["kube-system:cluster-autoscaler"]
+    }
+  }
+}
+
+resource "helm_release" "cluster_autoscaler_release" {
+  depends_on = [module.eks, module.cluster_auto_scaler_iam]
+  name       = "${lower(module.eks.cluster_name)}-ca"
+
+  repository = "https://kubernetes.github.io/autoscaler"
+  chart      = "cluster-autoscaler"
+
+  namespace = "kube-system"
+
+  set {
+    name  = "cloudProvider"
+    value = "aws"
+  }
+
+  set {
+    name  = "autoDiscovery.clusterName"
+    value = module.eks.cluster_name
+  }
+
+  set {
+    name  = "autoDiscovery.enabled"
+    value = "true"
+  }
+
+  set {
+    name  = "awsRegion"
+    value = var.region
+  }
+
+  set {
+    name  = "rbac.serviceAccount.create"
+    value = "true"
+  }
+
+  set {
+    name  = "rbac.serviceAccount.name"
+    value = "cluster-autoscaler"
+  }
+
+  set {
+    name  = "rbac.serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
+    value = module.cluster_auto_scaler_iam.iam_role_arn
+  }
+}
+
+################################################################################
 # KMS
 ################################################################################
 module "kms" {
@@ -64,11 +125,11 @@ module "kms" {
 # ACM Certificates
 ################################################################################
 module "app_certificate" {
-  source          = "../../Modules/ACM"
-  environment     = var.environment
-  application     = var.application
-  region          = var.region
-  domain_name     = var.app_domain_name
+  source      = "../../Modules/ACM"
+  environment = var.environment
+  application = var.application
+  region      = var.region
+  domain_name = var.app_domain_name
 }
 
 
@@ -76,9 +137,12 @@ module "app_certificate" {
 # Ingress
 ################################################################################
 module "app_ingress" {
-  source             = "../../Modules/kubernetes-ingress"
-  environment        = var.environment
-  depends_on         = [module.infrastructure.eks]
+  source      = "../../Modules/kubernetes-ingress"
+  environment = var.environment
+  depends_on = [
+    module.eks,
+    module.app_certificate
+  ]
   namespace          = "${var.environment}-${var.application}"
   app_name           = "java"
   lb_name            = var.lb_name
@@ -87,6 +151,5 @@ module "app_ingress" {
   certificate_arn    = module.app_certificate.certificate_arn
   application        = var.application
   healthcheck_path   = "/"
-  route53_zone_id    = module.route53.route53_zone_id
   url                = var.app_domain_name
 }

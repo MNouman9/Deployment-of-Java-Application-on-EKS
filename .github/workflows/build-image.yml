@@ -47,12 +47,17 @@ jobs:
       ## SonarQube implementation
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           projectBaseDir: JavaApp
           args: >
+            -Dsonar.branch.name=main
             -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
             -Dsonar.organization=${{ secrets.SONAR_ORG_KEY }}
             -Dsonar.token=${{ secrets.SONAR_TOKEN }}
+            -Dsonar.projectName=Deployment-of-Java-Application-on-EKS
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v3

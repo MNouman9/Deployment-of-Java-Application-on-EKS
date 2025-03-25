@@ -8,16 +8,16 @@ clean:
 
 init:
 	terraform fmt -recursive ../../
-	AWS_PROFILE=DEVAWS terraform init -backend-config=../../Backend/DEV-Backend.hcl -upgrade
+	AWS_PROFILE=DTEST terraform init -backend-config=../../Backend/DEV-Backend.hcl -upgrade
 	terraform validate
 
 plan:
 	make init
-	AWS_PROFILE=DEVAWS terraform plan -var-file="dev.tfvars" -out tf.plan && terraform show -no-color tf.plan > tfplan.txt
+	AWS_PROFILE=DTEST terraform plan -var-file="dev.tfvars" -out tf.plan && terraform show -no-color tf.plan > tfplan.txt
 
 apply:
 	echo -e '\033[36m ------ Going to Apply ------ \033[0m'
-	AWS_PROFILE=DEVAWS terraform apply "tf.plan"
+	AWS_PROFILE=DTEST terraform apply "tf.plan"
 
 deploy:
 	echo -e '\033[36m ------ Going to Deploy ------ \033[0m'
