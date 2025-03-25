@@ -18,7 +18,7 @@ on:
       ## For SonarQube implementation  
       # SONAR_TOKEN:
       #   required: true
-      
+
   workflow_dispatch:
 
 jobs:
@@ -37,6 +37,7 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
+          distribution: temurin
           java-version: '17'
 
       ## SonarQube implementation
