@@ -124,32 +124,32 @@ module "kms" {
 ################################################################################
 # ACM Certificates
 ################################################################################
-module "app_certificate" {
-  source      = "../../Modules/ACM"
-  environment = var.environment
-  application = var.application
-  region      = var.region
-  domain_name = var.app_domain_name
-}
+# module "app_certificate" {
+#   source      = "../../Modules/ACM"
+#   environment = var.environment
+#   application = var.application
+#   region      = var.region
+#   domain_name = var.app_domain_name
+# }
 
 
 ################################################################################
 # Ingress
 ################################################################################
-module "app_ingress" {
-  source      = "../../Modules/kubernetes-ingress"
-  environment = var.environment
-  depends_on = [
-    module.eks,
-    module.app_certificate
-  ]
-  namespace          = "${var.environment}-${var.application}"
-  app_name           = "java"
-  lb_name            = var.lb_name
-  service_name       = "${var.environment}-${var.application}-svc"
-  ingress_group_name = "${var.application}-${var.environment}-ingress-group"
-  certificate_arn    = module.app_certificate.certificate_arn
-  application        = var.application
-  healthcheck_path   = "/"
-  url                = var.app_domain_name
-}
+# module "app_ingress" {
+#   source      = "../../Modules/kubernetes-ingress"
+#   environment = var.environment
+#   depends_on = [
+#     module.eks,
+#     module.app_certificate
+#   ]
+#   namespace          = "${var.environment}-${var.application}"
+#   app_name           = "java"
+#   lb_name            = var.lb_name
+#   service_name       = "${var.environment}-${var.application}-svc"
+#   ingress_group_name = "${var.application}-${var.environment}-ingress-group"
+#   certificate_arn    = module.app_certificate.certificate_arn
+#   application        = var.application
+#   healthcheck_path   = "/"
+#   url                = var.app_domain_name
+# }
