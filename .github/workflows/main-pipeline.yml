@@ -15,12 +15,12 @@ permissions:
 
 jobs:
   build:
-    uses: ./.github/workflows/build-image.yml
+    uses: ./.github/workflows/actions/build-image.yml
     with:
       image-name: java-app
     secrets: inherit
 
   deploy:
     needs: build
-    uses: ./.github/workflows/deploy-app.yml
+    uses: ./.github/workflows/actions/deploy-app.yml
     secrets: inherit
