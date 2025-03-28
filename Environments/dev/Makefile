@@ -8,7 +8,7 @@ clean:
 
 init:
 	terraform fmt -recursive ../../
-	AWS_PROFILE=DTEST terraform init -backend-config=../../Backend/DEV-Backend.hcl -upgrade
+	AWS_PROFILE=DTEST terraform init -backend-config=../../Backend/Dev-Backend.hcl -upgrade
 	terraform validate
 
 plan:

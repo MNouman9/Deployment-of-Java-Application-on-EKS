@@ -23,26 +23,32 @@ This repository contains a production-ready deployment setup for a Java Spring B
 ## Project Structure
 
 ```
-├── JavaApp/                     # Spring Boot application
-│   └── Dockerfile              # Multi-stage Dockerfile for optimized builds
+├── .github/
+│   ├── workflows/
+│   └── ├── actions/
+│       │   ├── build-image.yml     # Reusable workflow for Docker build & ECR push
+│       │   └── deploy-image.yml    # Reusable workflow for Helm deployment
+│       ├── helm-artifact.yml       # Creates Helm Chart Artifact
+│       └── main-pipeline.yml       # Triggers reusable workflows on push events
+|
+├── Backend
+│   └── Dev-Backend.hcl
+|
+├── Environments/
+│   └── Dev/                        # Dev environment Terraform code
+|
+├── Modules/                        # Reusable Terraform modules
+|
+├── JavaApp/                        # Spring Boot application
+│   └── Dockerfile                  # Multi-stage Dockerfile for optimized builds
 │
 ├── helm-charts/
 │   ├── templates/
 │   │   ├── deployment.yaml
-│   │   ├── service.yaml
+│   │   └── service.yaml
 │   └── values.yaml
 │
-|   deploy-helm.sh              # Deploy Helm chart manually
-|
-├── Environments/
-│   ├── Dev/                    # Dev environment Terraform code
-│   └── Modules/                # Reusable Terraform modules
-│
-├── .github/
-│   └── workflows/
-│       ├── build-image.yml     # Reusable workflow for Docker build & ECR push
-│       ├── deploy-image.yml    # Reusable workflow for Helm deployment
-│       └── cicd.yml            # Triggers reusable workflows on push events
+└── deploy-helm.sh                  # Deploy Helm chart manually
 ```
 
 ---
